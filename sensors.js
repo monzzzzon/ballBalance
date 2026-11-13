@@ -155,26 +155,3 @@ function setupOrientation(threshold) {
     orientationSensor.threshold = threshold;
   }
 }
-
- console.log("remember to click the canvas to start the sensors")
- const threshold = 2; 
- let sensorAllowed = false; //hold styrk på om der er klikket
- 
- 
-function touchStarted() //ikke alle tlf reagerer på mousePressed
-{
-   if(!sensorAllowed)
-   {
-      setupOrientation(threshold);
-      sensorAllowed = true;
-   }
-}
-
-function mousePressed() //ikke alle computere reagerer på touch...
-{
-   if(!sensorAllowed)
-   {
-      setupOrientation(threshold);
-      sensorAllowed = true;
-   }
-}
