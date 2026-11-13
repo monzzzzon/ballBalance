@@ -2,6 +2,7 @@ let ballX;
 let targetX;
 let ballY;
 let ballRadius = 22;
+let startButton;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -9,6 +10,15 @@ function setup() {
   ballX = width / 2;
   targetX = width / 2;
   ballY = height / 2;
+  
+  startButton = createButton("ENABLE PHONE TILT");
+
+  startButton.position(width / 2 - 85, height - 80);
+
+  startButton.mousePressed(function() {
+  setupOrientation(2);
+  startButton.html("SENSOR ACTIVATION REQUESTED");
+  });
 }
 
 function draw() {
