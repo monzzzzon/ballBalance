@@ -83,26 +83,15 @@ function draw() {
   fill(180);
   text("Keep the ball balanced!", width / 2, 90);
   
-   // Balance line
-  stroke(220);
-  strokeWeight(3);
-  line(leftX, leftY, rightX, rightY);
-  
-  // Fixed support underneath the centre
+  // Triangle support directly underneath the balance line
   noStroke();
   fill(120, 140, 160);
   
-  // Triangle support
   triangle(
     width / 2 - 22, ballY + 48,
     width / 2 + 22, ballY + 48,
-    width / 2, ballY + 12
+    width / 2, ballY
   );
-  
-  // Circular pivot
-  fill(180, 195, 210);
-  circle(width / 2, ballY + 48, 14);
-
   // Ball
   noStroke();
   fill(80, 220, 130);
