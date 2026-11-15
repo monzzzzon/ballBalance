@@ -77,7 +77,7 @@ function draw() {
   noStroke();
   textAlign(CENTER);
   textSize(22);
-  text("FRIEND'S PHONE5", width / 2, 55);
+  text("FRIEND'S PHONE6", width / 2, 55);
 
   textSize(15);
   fill(180);
