@@ -37,7 +37,8 @@ function draw() {
   ballX = lerp(ballX, targetX, 0.08);
 
   // Calculate how much the line should tilt
-  let lineAngle = map(ballX, width / 2 - width / 2, width / 2 + width / 2, -0.25, 0.25);
+  // let lineAngle = map(ballX, width / 2 - width / 2, width / 2 + width / 2, -0.25, 0.25);
+  let lineAngle = map(ballX, 0, width, 0.25, -0.25);
 
   // Calculate the line's endpoints
   let lineLength = width - 60;
