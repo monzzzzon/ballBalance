@@ -29,18 +29,18 @@ function setup() {
     startButton.html("SENSOR ACTIVATION REQUESTED");
   });
 
-  // Set up speech recognition
+  // Speech recognition
   speechRec = new p5.SpeechRec("en-US", gotSpeech);
   speechRec.continuous = true;
   speechRec.interimResults = false;
+  speechRec.onEnd = speechEnded;
 
-  // Set up text-to-speech
+  // Text-to-speech
   speech = new p5.Speech();
 
   // Record message button
   recordButton = createButton("RECORD MESSAGE");
   recordButton.position(width / 2 - 85, height - 75);
-
   recordButton.mousePressed(toggleRecording);
 }
 
@@ -64,40 +64,48 @@ function draw() {
 
   let lineLength = width - 60;
 
+  // Calculate line endpoints
   let leftX = width / 2 - cos(lineAngle) * lineLength / 2;
   let leftY = ballY + sin(lineAngle) * lineLength / 2;
 
   let rightX = width / 2 + cos(lineAngle) * lineLength / 2;
   let rightY = ballY - sin(lineAngle) * lineLength / 2;
 
-  let ballYPosition = ballY - tan(lineAngle) * (ballX - width / 2);
+  // Ball position on the tilted line
+  let ballYPosition =
+    ballY - tan(lineAngle) * (ballX - width / 2);
 
   // Title
-  fill(255);
   noStroke();
+  fill(255);
   textAlign(CENTER);
   textSize(22);
-  text("FRIEND'S PHONE6", width / 2, 55);
+  text("FRIEND'S PHONE5", width / 2, 55);
 
   textSize(15);
   fill(180);
   text("Keep the ball balanced!", width / 2, 90);
-  
-  // Triangle support directly underneath the balance line
+
+  // Draw balance line FIRST
+  stroke(220);
+  strokeWeight(3);
+  line(leftX, leftY, rightX, rightY);
+
+  // Draw triangle support underneath the line
   noStroke();
   fill(120, 140, 160);
-  
+
   triangle(
     width / 2 - 22, ballY + 48,
     width / 2 + 22, ballY + 48,
     width / 2, ballY
   );
-  // Ball
-  noStroke();
+
+  // Draw ball
   fill(80, 220, 130);
   circle(ballX, ballYPosition - ballRadius, ballRadius * 2);
 
-  // Labels
+  // Left and right labels
   fill(180);
   textSize(13);
   text("LEFT", 45, ballY + 40);
@@ -110,13 +118,15 @@ function draw() {
   if (isListening) {
     text("LISTENING...", width / 2, height - 175);
   } else {
-    text("Send your friend a voice message", width / 2, height - 175);
+    text("Send your friend a voice message",
+         width / 2, height - 175);
   }
 
-  // Show recognised message
+  // Display recognised message
   textSize(12);
   fill(200);
-  text(messageText, width / 2, height - 155, width - 40, 40);
+  text(messageText, width / 2, height - 155,
+       width - 40, 40);
 }
 
 // Start or stop recording
@@ -131,7 +141,6 @@ function toggleRecording() {
 
   } else {
     isListening = false;
-
     speechRec.stop();
     recordButton.html("RECORD MESSAGE");
   }
@@ -145,7 +154,7 @@ function gotSpeech() {
   }
 }
 
-// Called when speech recognition stops
+// Called when speech recognition ends
 function speechEnded() {
   isListening = false;
   recordButton.html("RECORD MESSAGE");
@@ -155,6 +164,7 @@ function speechEnded() {
   }
 }
 
+// Resize screen
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   ballY = height / 2;
