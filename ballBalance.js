@@ -20,7 +20,6 @@ function setup() {
   startButton.html("SENSOR ACTIVATION REQUESTED");
   });
 }
-
 function draw() {
   background(20, 29, 42);
 
@@ -37,6 +36,21 @@ function draw() {
   // Smooth ball movement
   ballX = lerp(ballX, targetX, 0.08);
 
+  // Calculate how much the line should tilt
+  let lineAngle = map(ballX, width / 2 - width / 2, width / 2 + width / 2, -0.25, 0.25);
+
+  // Calculate the line's endpoints
+  let lineLength = width - 60;
+
+  let leftX = width / 2 - cos(lineAngle) * lineLength / 2;
+  let leftY = ballY + sin(lineAngle) * lineLength / 2;
+
+  let rightX = width / 2 + cos(lineAngle) * lineLength / 2;
+  let rightY = ballY - sin(lineAngle) * lineLength / 2;
+
+  // Calculate the ball's vertical position on the line
+  let ballYPosition = ballY - tan(lineAngle) * (ballX - width / 2);
+
   // Title
   fill(255);
   noStroke();
@@ -52,21 +66,16 @@ function draw() {
   // Balance line
   stroke(220);
   strokeWeight(3);
-  line(30, ballY, width - 30, ballY);
+  line(leftX, leftY, rightX, rightY);
 
   // Ball
   noStroke();
   fill(80, 220, 130);
-  circle(ballX, ballY - ballRadius, ballRadius * 2);
+  circle(ballX, ballYPosition - ballRadius, ballRadius * 2);
 
   // Left and right labels
   fill(180);
   textSize(13);
   text("LEFT", 45, ballY + 40);
   text("RIGHT", width - 45, ballY + 40);
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-  ballY = height / 2;
 }
