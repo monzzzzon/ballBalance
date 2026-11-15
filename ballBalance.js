@@ -4,31 +4,54 @@ let ballY;
 let ballRadius = 22;
 let startButton;
 
+// Voice recording
+let speechRec;
+let speech;
+let isListening = false;
+let transcript = "";
+
+let recordButton;
+let messageText = "";
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   ballX = width / 2;
   targetX = width / 2;
   ballY = height / 2;
-  
-  startButton = createButton("ENABLE PHONE TILT");
 
-  startButton.position(width / 2 - 85, height - 80);
+  // Tilt activation button
+  startButton = createButton("ENABLE PHONE TILT");
+  startButton.position(width / 2 - 85, height - 130);
 
   startButton.mousePressed(function() {
-  setupOrientation(2);
-  startButton.html("SENSOR ACTIVATION REQUESTED");
+    setupOrientation(2);
+    startButton.html("SENSOR ACTIVATION REQUESTED");
   });
+
+  // Set up speech recognition
+  speechRec = new p5.SpeechRec("en-US", gotSpeech);
+  speechRec.continuous = true;
+  speechRec.interimResults = false;
+
+  // Set up text-to-speech
+  speech = new p5.Speech();
+
+  // Record message button
+  recordButton = createButton("RECORD MESSAGE");
+  recordButton.position(width / 2 - 85, height - 75);
+
+  recordButton.mousePressed(toggleRecording);
 }
+
 function draw() {
   background(20, 29, 42);
 
-  // Read the phone's orientation
+  // Read phone orientation
   if (orientationSensor.hasNewValue) {
     let gyro = orientationSensor.get();
     let gamma = gyro.gamma;
 
-    // Convert phone tilt into a horizontal position
     targetX = map(gamma, -30, 30, 40, width - 40);
     targetX = constrain(targetX, 40, width - 40);
   }
@@ -36,11 +59,9 @@ function draw() {
   // Smooth ball movement
   ballX = lerp(ballX, targetX, 0.08);
 
-  // Calculate how much the line should tilt
-  // let lineAngle = map(ballX, width / 2 - width / 2, width / 2 + width / 2, -0.25, 0.25);
+  // Calculate line angle
   let lineAngle = map(ballX, 0, width, 0.25, -0.25);
 
-  // Calculate the line's endpoints
   let lineLength = width - 60;
 
   let leftX = width / 2 - cos(lineAngle) * lineLength / 2;
@@ -49,7 +70,6 @@ function draw() {
   let rightX = width / 2 + cos(lineAngle) * lineLength / 2;
   let rightY = ballY - sin(lineAngle) * lineLength / 2;
 
-  // Calculate the ball's vertical position on the line
   let ballYPosition = ballY - tan(lineAngle) * (ballX - width / 2);
 
   // Title
@@ -57,9 +77,8 @@ function draw() {
   noStroke();
   textAlign(CENTER);
   textSize(22);
-  text("FRIEND'S PHONE3", width / 2, 55);
+  text("FRIEND'S PHONE4", width / 2, 55);
 
-  // Instruction
   textSize(15);
   fill(180);
   text("Keep the ball balanced!", width / 2, 90);
@@ -74,9 +93,68 @@ function draw() {
   fill(80, 220, 130);
   circle(ballX, ballYPosition - ballRadius, ballRadius * 2);
 
-  // Left and right labels
+  // Labels
   fill(180);
   textSize(13);
   text("LEFT", 45, ballY + 40);
   text("RIGHT", width - 45, ballY + 40);
+
+  // Recording status
+  fill(255);
+  textSize(14);
+
+  if (isListening) {
+    text("LISTENING...", width / 2, height - 175);
+  } else {
+    text("Send your friend a voice message", width / 2, height - 175);
+  }
+
+  // Show recognised message
+  textSize(12);
+  fill(200);
+  text(messageText, width / 2, height - 155, width - 40, 40);
+}
+
+// Start or stop recording
+function toggleRecording() {
+  if (!isListening) {
+    transcript = "";
+    messageText = "";
+    isListening = true;
+
+    speechRec.start();
+    recordButton.html("STOP RECORDING");
+
+  } else {
+    isListening = false;
+
+    speechRec.stop();
+    recordButton.html("RECORD MESSAGE");
+  }
+}
+
+// Receive recognised speech
+function gotSpeech() {
+  if (speechRec.resultValue) {
+    transcript += speechRec.resultString + " ";
+    messageText = transcript;
+  }
+}
+
+// Called when speech recognition stops
+function speechEnded() {
+  isListening = false;
+  recordButton.html("RECORD MESSAGE");
+
+  if (transcript.trim() !== "") {
+    speech.speak(transcript);
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  ballY = height / 2;
+
+  startButton.position(width / 2 - 85, height - 130);
+  recordButton.position(width / 2 - 85, height - 75);
 }
