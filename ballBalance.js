@@ -77,16 +77,31 @@ function draw() {
   noStroke();
   textAlign(CENTER);
   textSize(22);
-  text("FRIEND'S PHONE4", width / 2, 55);
+  text("FRIEND'S PHONE5", width / 2, 55);
 
   textSize(15);
   fill(180);
   text("Keep the ball balanced!", width / 2, 90);
-
-  // Balance line
+  
+   // Balance line
   stroke(220);
   strokeWeight(3);
   line(leftX, leftY, rightX, rightY);
+  
+  // Fixed support underneath the centre
+  noStroke();
+  fill(120, 140, 160);
+  
+  // Triangle support
+  triangle(
+    width / 2 - 22, ballY + 48,
+    width / 2 + 22, ballY + 48,
+    width / 2, ballY + 12
+  );
+  
+  // Circular pivot
+  fill(180, 195, 210);
+  circle(width / 2, ballY + 48, 14);
 
   // Ball
   noStroke();
