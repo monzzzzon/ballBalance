@@ -101,8 +101,21 @@ function draw() {
     width / 2, ballY
   );
 
+  // Calculate distance from the centre
+  let distanceFromCenter = abs(ballX - width / 2);
+  
+  // Calculate the colour based on the distance
+  let redCol = map(distanceFromCenter, 0, width / 2, 80, 255);
+  let greenCol = map(distanceFromCenter, 0, width / 2, 220, 0);
+  let blueCol = map(distanceFromCenter, 0, width / 2, 130, 0);
+  
+  // Keep colours within valid RGB values
+  redCol = constrain(redCol, 0, 255);
+  greenCol = constrain(greenCol, 0, 255);
+  blueCol = constrain(blueCol, 0, 255);
+  
   // Draw ball
-  fill(80, 220, 130);
+  fill(redCol, greenCol, blueCol);
   circle(ballX, ballYPosition - ballRadius, ballRadius * 2);
 
   // Left and right labels
