@@ -80,7 +80,7 @@ function draw() {
   fill(255);
   textAlign(CENTER);
   textSize(22);
-  text("FRIEND'S PHONE5", width / 2, 55);
+  text("FRIEND'S PHONE", width / 2, 55);
 
   textSize(15);
   fill(180);
@@ -154,6 +154,9 @@ function toggleRecording() {
 
   } else {
     isListening = false;
+
+    console.log("Complete message:", transcript);
+    
     speechRec.stop();
     recordButton.html("RECORD MESSAGE");
   }
