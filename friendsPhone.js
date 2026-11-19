@@ -1,5 +1,6 @@
+
 let startButton;
-let shakevalue = 0; 
+let shakeValue = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -23,17 +24,29 @@ function setup() {
 function draw() {
   // Update the ball according to phone movement
   updateBalance();
+
+  // Calculate the shake value
   shakeValue = calculateShake();
 
+  // Print the shake value in the console every 30 frames
   if (frameCount % 30 === 0) {
-  console.log("Shake value:", shakeValue.toFixed(2));
-}
+    console.log("Shake value:", shakeValue.toFixed(2));
+  }
 
   // Calculate the balance line and ball position
   let balanceData = calculateBalance();
 
   // Draw the screen
   drawVisuals(balanceData);
+
+  // Display the shake value on the phone screen
+  push();
+  fill(255);
+  noStroke();
+  textAlign(CENTER);
+  textSize(14);
+  text("SHAKE: " + shakeValue.toFixed(2), width / 2, 125);
+  pop();
 
   // Draw the voice recording interface
   drawVoice();
