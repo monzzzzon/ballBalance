@@ -7,7 +7,7 @@ function drawVisuals(balanceData) {
   fill(255);
   textAlign(CENTER);
   textSize(22);
-  text("FRIEND'S PHONE", width / 2, 55);
+  text("FRIEND'S PHONE2", width / 2, 55);
 
   textSize(15);
   fill(180);
