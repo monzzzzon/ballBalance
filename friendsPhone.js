@@ -22,6 +22,11 @@ function setup() {
 function draw() {
   // Update the ball according to phone movement
   updateBalance();
+  let shakeValue = calculateShake();
+
+  if (frameCount % 30 === 0) {
+  console.log("Shake value:", shakeValue.toFixed(2));
+}
 
   // Calculate the balance line and ball position
   let balanceData = calculateBalance();
